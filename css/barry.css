@@ -1,0 +1,13 @@
+.barryImg{
+    float: left;
+}
+
+.barryName{
+    font-size: 20px;
+    padding-left: 10px;
+}
+
+.barryText {
+    padding-left: 40px;
+    color: white;
+}

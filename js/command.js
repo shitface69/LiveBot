@@ -8,6 +8,7 @@ function command(text) {
     let img = document.createElement('img');
     img.id = 'messageImg';
     img.src = './resources/images/Barry.png';
+    img.classList.toggle('barryImg')
     div.appendChild(img);
   
     let name = document.createElement('p');
@@ -17,6 +18,7 @@ function command(text) {
     name.appendChild(username);
     name.id = 'messageUsername';
     name.style.color = `#999999`;
+    name.classList.toggle("barryName")
     div.appendChild(name);
   
     let text2 = document.createElement('p');
@@ -36,8 +38,9 @@ function command(text) {
         text2.appendChild(content);
         text2.id = 'messageText';
     }
+    text2.classList.toggle("barryText")
     div.appendChild(text2);
     document.getElementById('message-list').scrollTop = document.getElementById('message-list').scrollHeight;
-    document.getElementById('msgbox').value = '';
+    document.getElementById('msgbox').innerText = '';
     barry = true;
   }

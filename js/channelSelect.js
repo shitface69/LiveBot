@@ -104,7 +104,9 @@ function channelSelect(c, name) {
                         text.classList.add('messageText');
                         text.id = m.id;
                         text.innerHTML = parseMessage(m.cleanContent);
-
+                        if(m.editedAt)
+                            text.innerHTML += '<time class="edited"> (edited)</time>'
+                        messageMenu(m, text)
                         messageContainer.appendChild(text);
                     }
                     
