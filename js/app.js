@@ -48,11 +48,11 @@ function create() {
     // Call the general click event listener script
     addDocListener();
 
-    // Add the bot.js script tag
-    let script = document.createElement('script');
-    script.charset = 'utf-8';
-    script.src = 'js/bot.js';
-    document.head.appendChild(script);
+    // // Add the bot.js script tag
+    // let script = document.createElement('script');
+    // script.charset = 'utf-8';
+    // script.src = 'js/bot.js';
+    // document.head.appendChild(script);
 
     load(localStorage.getItem('livebot-token'));
 }
