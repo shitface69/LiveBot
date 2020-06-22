@@ -1,6 +1,6 @@
 {
 	"name": "livebot",
-	"version": "1.0.0",
+	"version": "2.0.0",
 	"description": "Discord for bots!",
 	"main": "start.js",
 	"scripts": {
@@ -26,6 +26,7 @@
 		"custom-electron-titlebar": "^3.2.1",
 		"discord.js": "^11.5.1",
 		"electron": "^7.1.10",
-		"react": "^16.13.1"
+		"react": "^16.13.1",
+		"react-dom": "^16.13.1"
 	}
 }
