@@ -1,6 +1,8 @@
 let setToken = async () => {
-    let client = new Discord.Client()
+    console.log('Setting new token...')
+    let client = new Client()
     try{
+        // WILL NEED TO CHECK IF THIS IS AN INVALED TOKEN ERROR
         await client.login(document.getElementById('tokenbox').value);
         client.destroy();
     

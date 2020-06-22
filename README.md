@@ -1,5 +1,7 @@
 <center><img src='resources/icons/logoLarge.svg' height='100px' style='border-radius: 10px;'/></center>
 
+### This branch of livebot is very experimental, and likely not functional. Please switch to master or executable if you want to download Livebot
+
 ## LIVEBOT CAN BE USED FOR USER ACCOUNTS, HOWEVER IT IS AGAINST TOS TO DO SO. USE AT YOUR OWN RISK
 An app that allows you to be inside a bot!
 

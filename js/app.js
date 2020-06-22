@@ -1,8 +1,9 @@
-global.Discord = require('discord.js');
+const {ShardingManager} = require('discord.js');
 const remote = require('electron').remote;
 const fs = require('fs');
 let jsonSettings = require("./json/settings.json");
 
+// Some global variables
 let selectedGuild;
 let selectedChan;
 let selectedVoice;
@@ -46,6 +47,12 @@ function create() {
 
     // Call the general click event listener script
     addDocListener();
+
+    // Add the bot.js script tag
+    let script = document.createElement('script');
+    script.charset = 'utf-8';
+    script.src = 'js/bot.js';
+    document.head.appendChild(script);
 
     load(localStorage.getItem('livebot-token'));
 }
