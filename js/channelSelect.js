@@ -1,4 +1,4 @@
-let channelSelect = (c, name) => {
+let channelSelect = (c, name, shard) => {
     let messages = document.getElementById("message-list");
     let fetchSize = 100;
 

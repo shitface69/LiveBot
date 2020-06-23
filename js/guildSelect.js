@@ -6,7 +6,7 @@ function format(text) {
 }
 
 // Selecting new guild
-let guildSelect = (g, img) => {
+async function guildSelect(g, img, shard) {
     // Update the selected guild
     //document.getElementById('guildIndicator').style.display = 'block';
     if (oldimg)
@@ -25,8 +25,8 @@ let guildSelect = (g, img) => {
     } catch(err){}
 
     // Update the member count every 2000 ms
-    global.memberLoop = setInterval(() => {
-        document.getElementById('members-count').innerText = g.memberCount;
+    global.memberLoop = setInterval(async () => {
+        document.getElementById('members-count').innerText = await shard.eval(`this.guilds.get('${g.id}').memberCount`);
     }, 2000);
     // Set the count to begin
     document.getElementById('members-count').innerText = g.memberCount;
@@ -50,7 +50,7 @@ let guildSelect = (g, img) => {
     document.getElementById('guildImg').src = icon;
 
     // Create the member list
-    addMemberList(g);
+    addMemberList(g, shard);
 
     // The parent variable will change, realParent will not
     const realParent = document.getElementById("channel-elements");
@@ -58,7 +58,7 @@ let guildSelect = (g, img) => {
     let categoryParent;
 
     // Sort the channels and add them to the screen
-    g.channels.array()
+    (await shard.eval(`this.guilds.get('${g.id}').channels.map(c => c)`))
         .filter(c => c.type == 'category')
         .sort((c1, c2) => c1.position - c2.position)
         .forEach(c => {
@@ -106,10 +106,10 @@ let guildSelect = (g, img) => {
             }
         });
 
-    g.channels.array()
+    (await shard.eval(`this.guilds.get('${g.id}').channels.map(c => c)`))
         .filter(c => c.type != 'category')
         .sort((c1, c2) => c1.position - c2.position)
-        .forEach(c => {
+        .forEach(async c => {
             // At this point, the channel is either text or voice
             let div = document.createElement("div");
             div.classList.add("channel");
@@ -118,7 +118,8 @@ let guildSelect = (g, img) => {
 
             // check if user can access the channel
             let blocked = false;
-            if (!c.permissionsFor(g.me).has("VIEW_CHANNEL")) {
+            let hasPerms = await shard.eval(`!this.channels.get(${c.id}).permissionsFor(this.guilds.get('${g.id}').me).has("VIEW_CHANNEL")`);
+            if (hasPerms) {
                 blocked = true;
                 div.classList.add("blocked");
             }
@@ -156,7 +157,7 @@ let guildSelect = (g, img) => {
 
                     if (id != c.id) {
                         div.classList.add("selectedChan");
-                        channelSelect(c, div);
+                        channelSelect(c, div, shard);
                     }
                 });
             }

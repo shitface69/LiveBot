@@ -36,20 +36,26 @@ function load(token) {
             // Event handlers here
             if (event == 'raw') {
                 // Uncached stuff happens here
-            } if (event == 'ready')
-                // Call the ready function
-                shard.eval('this').then(e => ready(e));
-                
-
-            else if (event == 'message') {
-                console.log(args[0]);
+            } if (event == 'ready') {
+                //shard.broadcastEval('this.user').then(e => console.log(e));
+                console.log('ready');
+                ready(shard);
+            } else if (event == 'message') {
+                message(...args);
+            } else if (event == 'messageDelete') {
+                msgDelete(...args);
+            } else if (event == 'messageDeleteBulk') {
+                msgBulkDelete(...args);
             } else if (event == 'messageUpdate') {
+                msgUpdate(...args);
+            } else if (event == 'error' || event == 'disconnect') {
                 console.log(args);
+                disconnect();
             }
                 
     
         } else {
-            console.log(`Not a message`) 
+            console.log(`Not a message: ${message}`) 
         }
     });
 }
@@ -77,4 +83,16 @@ function removeMessage(message, firstMessage) {
     } else {
         document.getElementById('message-list').removeChild(message.parentNode);
     }
+}
+
+function getUser(shard) {
+    return new Promise((resolve, reject) => {
+        shard.eval('JSON.decycle(this.user)').then(user => {
+            user.tag = `${user.username}#${user.discriminator}`;
+            shard.eval('this.user.displayAvatarURL').then(url => {
+                user.displayAvatarURL = url;
+                resolve(user);
+            })
+        });
+    });
 }

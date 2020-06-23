@@ -1,59 +1,58 @@
-let addMemberList = guild => {
+async function addMemberList(guild, shard) {
     let listDiv = document.getElementById("memberBar");
 
     // Clear members list
     listDiv.innerHTML = '';
 
     // Loop through roles
-    let roles = guild.roles
-        .map(r => r) // Convert to array
+    let roles = (await shard.eval(`this.guilds.get('${guild.id}').roles.map(r => r)`))
         .filter(r => r.hoist) // Check if it is a displayed role
         .sort((r1, r2) => r2.position - r1.position); // Sort by highest to lowest rank
 
-    roles.forEach(r => { // Loop through
-            let memberCount = r.members.filter(m => (m.hoistRole && m.hoistRole.id == r.id && m.presence.status != 'offline')).size;
+    roles.forEach(async r => { // Loop through
+        let memberCount = await shard.eval(`this.guilds.get('${guild.id}').roles.get('${r.id}').members.filter(m => (m.hoistRole && m.hoistRole.id == r.id && m.presence.status != 'offline')).size`);
 
-            if (memberCount) {
-                // Role container
-                let container = document.createElement("div");
-                container.id = r.id;
-                container.classList.add("roleContainer");
-                listDiv.appendChild(container);
+        if (memberCount) {
+            // Role container
+            let container = document.createElement("div");
+            container.id = r.id;
+            container.classList.add("roleContainer");
+            listDiv.appendChild(container);
 
-                // Add the role name
-                let name = document.createElement("span");
-                name.classList.add("roleTitle");
-                name.innerText = r.name;
-                container.appendChild(name);
-                
-                // Add each user
-                r.members
-                    .filter(m => (m.hoistRole && m.hoistRole.id == r.id && m.presence.status != 'offline'))
-                    .sort((m1, m2) => m1.id - m2.id)
-                    .forEach(m => {
-                        // Make the div for the user
-                        let userDiv = document.createElement("div");
-                        userDiv.id = m.id;
-                        userDiv.classList.add('mLUserDiv');
-                        container.appendChild(userDiv);
+            // Add the role name
+            let name = document.createElement("span");
+            name.classList.add("roleTitle");
+            name.innerText = r.name;
+            container.appendChild(name);
+            
+            // Add each user
+            r.members
+                .filter(m => (m.hoistRole && m.hoistRole.id == r.id && m.presence.status != 'offline'))
+                .sort((m1, m2) => m1.id - m2.id)
+                .forEach(m => {
+                    // Make the div for the user
+                    let userDiv = document.createElement("div");
+                    userDiv.id = m.id;
+                    userDiv.classList.add('mLUserDiv');
+                    container.appendChild(userDiv);
 
-                        // Add the user icon
-                        let icon = document.createElement("img");
-                        icon.src = m.user.avatarURL ? m.user.avatarURL.replace(/(size=)(\d+)/gi, "$164") : "resources/images/default.png";
-                        icon.classList.add('mLIcon');
-                        userDiv.appendChild(icon);
+                    // Add the user icon
+                    let icon = document.createElement("img");
+                    icon.src = m.user.avatarURL ? m.user.avatarURL.replace(/(size=)(\d+)/gi, "$164") : "resources/images/default.png";
+                    icon.classList.add('mLIcon');
+                    userDiv.appendChild(icon);
 
-                        // Make the username text
-                        let username = document.createElement("p");
-                        username.classList.add("mLUsername");
-                        let name = m.nickname || m.user.username;
-                        if (name.length > 15) {
-                            name = `${name.substring(0, 15)}...`
-                        }
-                        username.innerText = name;
-                        username.style.color = m.displayHexColor || "#8E9297";
-                        userDiv.appendChild(username);
-                    });
+                    // Make the username text
+                    let username = document.createElement("p");
+                    username.classList.add("mLUsername");
+                    let name = m.nickname || m.user.username;
+                    if (name.length > 15) {
+                        name = `${name.substring(0, 15)}...`
+                    }
+                    username.innerText = name;
+                    username.style.color = m.displayHexColor || "#8E9297";
+                    userDiv.appendChild(username);
+                });
             }
         });
 
